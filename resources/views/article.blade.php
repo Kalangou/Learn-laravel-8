@@ -3,8 +3,8 @@
 @section('content')
     <h1>{{ $post->content }}</h1>
 
-    <span>{{ $post->image ? $post->image->path : "Pas d'image" }}</span>
-
+    {{-- <span>{{ $post->image ? $post->im  age->path : "Pas d'image" }}</span> --}}
+    <img src="{{ Storage::url($post->image->path) }}" alt="">
     <hr>
     @forelse ( $post->comments as $comment )
         <div>{{ $comment->content }} | Créé le {{ $comment->created_at->format('d/m/Y') }}</div>

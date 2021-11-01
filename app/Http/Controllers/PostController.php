@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Image;
 use App\Models\Post;
 use App\Models\Video;
 use App\Rules\Uppercase;
@@ -70,11 +71,11 @@ class PostController extends Controller
         // $file = Storage::disk('local')->put('avatars', $request->avatar);
         $filename = 'image_'.time().'.'.$request->avatar->extension();
 
-        dd($request->file('avatar')->storeAs(
-            'avatars',
-            $filename,
-            'public'
-        ));
+        $path = $request->file('avatar')->storeAs(
+                    'avatars',
+                    $filename,
+                    'public'
+                );
 
         // dd(Storage::path($filename));
 
@@ -83,10 +84,15 @@ class PostController extends Controller
             'content' => ['required']
         ]);
 
-        Post::create([
+        $post = Post::create([
             'title' => $request->title,
             'content' => $request->content
         ]);
+
+        $image = new Image();
+        $image->path = $path;
+
+        $post->image()->save($image);
 
         dd('Post créé');
         // Premier forme de recuperation des valeurs
